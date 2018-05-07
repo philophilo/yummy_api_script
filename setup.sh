@@ -46,7 +46,7 @@ echo ======= start nginx
 sudo systemctl start nginx
 
 echo ======= copy nginx config to available sites
-sudo cp yummy_api_script/yummy /etc/nginx/sites-available/
+sudo cp ../yummy_api_script/yummy /etc/nginx/sites-available/
 
 echo ======= remove default nginx configurations
 sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
