@@ -57,3 +57,9 @@ sudo ln -s /etc/nginx/sites-available/recipe /etc/nginx/sites-enabled/
 echo ======= restart nginx
 sudo systemctl restart nginx
 sudo systemctl status nginx
+
+echo ======= export environment variables 
+export DATABASE_URL='postgres://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
+
+echo ======= start with gunicorn
+gunicorn run:app
