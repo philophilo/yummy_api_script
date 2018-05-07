@@ -36,7 +36,7 @@ echo ======= Clone the repo
 sudo git clone https://github.com/philophilo/yummy_api.git
 
 echo ======= Entering the project folder
-cd yummy_api_script
+cd yummy_api
 
 echo ======= installing all the project requirements
 sudo pip3 install -r requirements.txt
