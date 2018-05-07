@@ -41,3 +41,19 @@ cd yummy_api
 
 echo ======= installing all the project requirements
 sudo pip3 install -r requirements.txt
+
+echo ======= start nginx
+sudo systemctl start nginx
+
+echo ======= copy nginx config to available sites
+sudo cp yummy_api_script/yummy /etc/nginx/sites-available/
+
+echo ======= remove default nginx configurations
+sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+echo ======= create symbolic link to nginx new configuration
+sudo ln -s /etc/nginx/sites-available/recipe /etc/nginx/sites-enabled/
+
+echo ======= restart nginx
+sudo systemctl restart nginx
+sudo systemctl status nginx
