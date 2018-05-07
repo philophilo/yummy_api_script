@@ -33,7 +33,7 @@ echo ======= activate the virtual env
 source venv/bin/activate
 
 echo ======= Clone the repo
-sudo git clone https://github.com/philophilo/yummy_api_script.git
+sudo git clone https://github.com/philophilo/yummy_api.git
 
 echo ======= Entering the project folder
 cd yummy_api_script
