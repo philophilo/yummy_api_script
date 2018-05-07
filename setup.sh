@@ -12,8 +12,9 @@ sudo add-apt-repository -y ppa:deadsnakes/ppa
 echo ======= update python 3.6 among the list of packages that can be installed
 sudo apt-get update
 
-echo ======= install python3.6
-sudo apt-get install -y python3.6
+echo ======= install python3.6 and python3.6 dev 
+sudo apt-get install -y python3.6 python3.6-dev
+
 
 echo ======= make python3.6 default the python3 by symbolic links in /etc/alternatives
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
