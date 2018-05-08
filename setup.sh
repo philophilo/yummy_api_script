@@ -24,6 +24,11 @@ sudo update-alternatives --config -y python3
 echo ======= install gunicorn, pip and nginx
 sudo apt-get install -y python3-pip nginx gunicorn
 
+echo ======= install extra packages for python development environment
+sudo apt-get install -y build-essential autoconf libtool pkg-config python-opengl python-imaging python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev libssl-dev
+sudo easy_install greenlet
+sudo easy_install gevent
+
 echo ======= install virtualenv
 sudo pip3 install virtualenv
 
@@ -52,14 +57,14 @@ echo ======= remove default nginx configurations
 sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 echo ======= create symbolic link to nginx new configuration
-sudo ln -s /etc/nginx/sites-available/recipe /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/yummy /etc/nginx/sites-enabled/
 
 echo ======= restart nginx
 sudo systemctl restart nginx
 sudo systemctl status nginx
 
 echo ======= export environment variables 
-export DATABASE_URL='postgres://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
+export DATABASE_URL='postgresql://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
 
 echo ======= start with gunicorn
 gunicorn run:app
