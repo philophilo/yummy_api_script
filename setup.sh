@@ -30,22 +30,22 @@ sudo easy_install greenlet
 sudo easy_install gevent
 
 echo ======= install virtualenv
-sudo pip3 install virtualenv
+pip3 install virtualenv
 
 echo ======= creating the virtual environment
-sudo virtualenv -p python3 venv
+virtualenv -p python3 venv
 
 echo ======= activate the virtual env
 source venv/bin/activate
 
 echo ======= Clone the repo
-sudo git clone https://github.com/philophilo/yummy_api.git
+git clone https://github.com/philophilo/yummy_api.git
 
 echo ======= Entering the project folder
 cd yummy_api
 
 echo ======= installing all the project requirements
-sudo pip3 install -r requirements.txt
+pip install -r requirements.txt
 
 echo ======= start nginx
 sudo systemctl start nginx
@@ -65,6 +65,11 @@ sudo systemctl status nginx
 
 echo ======= export environment variables 
 export DATABASE_URL='postgresql://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
+
+echo ======= perform database migrations
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
 
 echo ======= start with gunicorn
 gunicorn run:app
