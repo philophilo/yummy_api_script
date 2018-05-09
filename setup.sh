@@ -1,75 +1,88 @@
 #!/usr/bin/env bash
 
-echo ======= step out of git repo
-cd ..
- 
-echo ======= update source list for packages and versions that can be installed
-sudo apt-get update
+update_ubuntu(){
+	echo ============================================= update ubuntu  ================================================================
+	cd .. # step out of git repo
+	sudo apt-get update # update source list for packages and versions that can be installed
+}
 
-echo ======= add python3.6 PPA == Personal Packages Archives ==  to the list of sources
-sudo add-apt-repository -y ppa:deadsnakes/ppa
+update_python(){
+	echo ============================================= install python3.6 ==============================================================
+	sudo add-apt-repository -y ppa:deadsnakes/ppa # add python3.6 PPA == Personal Packages Archives ==  to the list of sources
+	sudo apt-get update #update python 3.6 among the list of packages that can be installed
+	sudo apt-get install -y python3.6 python3.6-dev # install python3.6 and python3.6 dev 
+	sudo apt-get install -y python3-pip
+} 
 
-echo ======= update python 3.6 among the list of packages that can be installed
-sudo apt-get update
+set_default_python(){
+	echo ============================ make python3.6 default the python3 by symbolic links in /etc/alternatives ========================
+	sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+	sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 10
+	sudo update-alternatives --config -y python3
+}
 
-echo ======= install python3.6 and python3.6 dev 
-sudo apt-get install -y python3.6 python3.6-dev
+install_server(){
+	echo ============================================== install gunicorn and nginx ====================================================
+	sudo apt-get install -y nginx gunicorn
+}
 
+install_python_dependencies(){
+    echo ====================================== install extra packages for python development environment==============================
+    sudo apt-get install -y build-essential autoconf libtool pkg-config python-opengl python-imaging python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev libssl-dev
+    sudo easy_install greenlet
+    sudo easy_install gevent
+}
 
-echo ======= make python3.6 default the python3 by symbolic links in /etc/alternatives
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 10
-sudo update-alternatives --config -y python3
+create_virtual_environment(){
+    echo ============================================ create python3.6 virtual environment ============================================
+    pip3 install virtualenv # install virtualenv
+    virtualenv -p python3 venv # creating the virtual environment
+    source venv/bin/activate # activate the virtual env
+}
 
-echo ======= install gunicorn, pip and nginx
-sudo apt-get install -y python3-pip nginx gunicorn
+app_setup(){
+    echo ================================================= app setup ==================================================================
+    git clone https://github.com/philophilo/yummy_api.git # Clone the repo
+    cd yummy_api # Entering the project folder
+    pip install -r requirements.txt # installing all the project requirements
+}
 
-echo ======= install extra packages for python development environment
-sudo apt-get install -y build-essential autoconf libtool pkg-config python-opengl python-imaging python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev libssl-dev
-sudo easy_install greenlet
-sudo easy_install gevent
+nginx_setup(){
+    echo ================================================= nginx setup ================================================================
+    sudo systemctl start nginx # start nginx
+    sudo cp ../yummy_api_script/yummy /etc/nginx/sites-available/ # copy nginx config to available sites
+    sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default # remove default nginx configurations
+    sudo ln -s /etc/nginx/sites-available/yummy /etc/nginx/sites-enabled/ # create symbolic link to nginx new configuration
+    sudo systemctl restart nginx # restart nginx
+    sudo systemctl status nginx
+}
 
-echo ======= install virtualenv
-pip3 install virtualenv
+database_setup(){
+    echo ================================================= database setup ============================================================
+    # export environment variables 
+    export DATABASE_URL='postgresql://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
+    # perform database migrations
+    python manage.py db init
+    python manage.py db migrate
+    python manage.py db upgrade
+}
 
-echo ======= creating the virtual environment
-virtualenv -p python3 venv
+start_app(){
+    echo ================================================= start with gunicorn ======================================================
+    gunicorn run:app
+}
 
-echo ======= activate the virtual env
-source venv/bin/activate
+run(){
+    update_ubuntu
+    update_python
+    set_default_python
+    install_server
+    install_python_dependencies
+    create_virtual_environment
+    app_setup
+    nginx_setup
+    database_setup
+    start_app
+}
 
-echo ======= Clone the repo
-git clone https://github.com/philophilo/yummy_api.git
-
-echo ======= Entering the project folder
-cd yummy_api
-
-echo ======= installing all the project requirements
-pip install -r requirements.txt
-
-echo ======= start nginx
-sudo systemctl start nginx
-
-echo ======= copy nginx config to available sites
-sudo cp ../yummy_api_script/yummy /etc/nginx/sites-available/
-
-echo ======= remove default nginx configurations
-sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-echo ======= create symbolic link to nginx new configuration
-sudo ln -s /etc/nginx/sites-available/yummy /etc/nginx/sites-enabled/
-
-echo ======= restart nginx
-sudo systemctl restart nginx
-sudo systemctl status nginx
-
-echo ======= export environment variables 
-export DATABASE_URL='postgresql://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy'
-
-echo ======= perform database migrations
-python manage.py db init
-python manage.py db migrate
-python manage.py db upgrade
-
-echo ======= start with gunicorn
-gunicorn run:app
+run
