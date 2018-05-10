@@ -67,9 +67,26 @@ database_setup(){
     python manage.py db upgrade
 }
 
+setup_supervisor(){
+    sudo apt-get install -y supervisor
+    sudo bash -c 'cat <<EOF > /etc/supervisor/conf.d/yummy.conf
+    [program:yummy]
+    command=/home/ubuntu/venv/bin/gunicorn run:app --preload -p rocket.pid -b 0.0.0.0:8000 --access-logfile "-"
+    environment=DATABASE_URL="postgresql://philophilo:12345678@databasepsql.c4ecouwmxh9c.us-east-2.rds.amazonaws.com:5432/yummy"
+    directory=/home/ubuntu/yummy_api
+    user=ubuntu
+    autostart=true
+    autorestart=unexpected
+    stdout_logfile=/home/ubuntu/gunicorn.log
+    stderr_logfile=/home/ubuntu/gunicorn.err.log
+    EOF'
+}
+
 start_app(){
     echo ================================================= start with gunicorn ======================================================
-    gunicorn run:app
+    sudo supervisorctl reread
+    sudo supervisorctl update
+    sudo supervisorctl start yummy
 }
 
 run(){
@@ -82,6 +99,7 @@ run(){
     app_setup
     nginx_setup
     database_setup
+    setup_supervisor
     start_app
 }
 
