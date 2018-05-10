@@ -4,14 +4,16 @@ update_ubuntu(){
 	echo ============================================= update ubuntu  ================================================================
 	cd .. # step out of git repo
 	sudo apt-get update # update source list for packages and versions that can be installed
+	export LANG="en_US.UTF-8"
+	export LC_ALL="en_US.UTF-8"
+	export LC_CTYPE="en_US.UTF-8"
 }
 
 update_python(){
 	echo ============================================= install python3.6 ==============================================================
 	sudo add-apt-repository -y ppa:deadsnakes/ppa # add python3.6 PPA == Personal Packages Archives ==  to the list of sources
 	sudo apt-get update #update python 3.6 among the list of packages that can be installed
-	sudo apt-get install -y python3.6 python3.6-dev # install python3.6 and python3.6 dev 
-	sudo apt-get install -y python3-pip
+	sudo apt-get install -y python3.6 python3-pip python3.6-dev python3-gdbm # install python3.6 and python3.6 dev python3-gdbm 
 } 
 
 set_default_python(){
@@ -31,9 +33,6 @@ install_python_dependencies(){
     sudo apt-get install -y build-essential autoconf libtool pkg-config python-opengl python-imaging python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev libssl-dev
     sudo easy_install greenlet
     sudo easy_install gevent
-    sudo apt-get install python3-gdbm
-    export LC_ALL=en_US.UTF-8 
-    export LANG=en_US.UTF-8
 }
 
 create_virtual_environment(){
@@ -74,6 +73,8 @@ setup_ssh_certbot(){
     echo ================================================= certbot setup ============================================================
     sudo add-apt-repository ppa:certbot/certbot
     sudo apt-get update
+    sudo cp /usr/lib/python3/dist-packages/apt_pkg.cpython-35m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages/apt_pkg.so
+    sudo pip3 install cffi
     sudo apt-get install python-certbot-nginx
     sudo certbot --nginx
 }
