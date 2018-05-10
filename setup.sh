@@ -14,6 +14,7 @@ update_python(){
 	sudo add-apt-repository -y ppa:deadsnakes/ppa # add python3.6 PPA == Personal Packages Archives ==  to the list of sources
 	sudo apt-get update #update python 3.6 among the list of packages that can be installed
 	sudo apt-get install -y python3.6 python3-pip python3.6-dev python3-gdbm # install python3.6 and python3.6 dev python3-gdbm 
+    sudo cp /usr/lib/python3/dist-packages/apt_pkg.cpython-35m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages/apt_pkg.so
 } 
 
 set_default_python(){
@@ -55,8 +56,6 @@ nginx_setup(){
     sudo cp ../yummy_api_script/yummy /etc/nginx/sites-available/ # copy nginx config to available sites
     sudo rm -rf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default # remove default nginx configurations
     sudo ln -s /etc/nginx/sites-available/yummy /etc/nginx/sites-enabled/ # create symbolic link to nginx new configuration
-    sudo systemctl restart nginx # restart nginx
-    sudo systemctl status nginx
 }
 
 database_setup(){
@@ -71,12 +70,17 @@ database_setup(){
 
 setup_ssh_certbot(){
     echo ================================================= certbot setup ============================================================
-    sudo add-apt-repository ppa:certbot/certbot
+    deactivate 
+    sudo add-apt-repository -y ppa:certbot/certbot
     sudo apt-get update
-    sudo cp /usr/lib/python3/dist-packages/apt_pkg.cpython-35m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages/apt_pkg.so
     sudo pip3 install cffi
     sudo apt-get install python-certbot-nginx
-    sudo certbot --nginx certonly # create a single new certficate, or update existing and assign to specified name
+    sudo certbot --nginx certonly
+}
+
+start_nginx(){
+    sudo systemctl restart nginx # restart nginx
+    sudo systemctl status nginx
 }
 
 setup_supervisor(){
@@ -103,6 +107,7 @@ run(){
     nginx_setup
     database_setup
     setup_ssh_certbot
+    start_nginx
     setup_supervisor
     start_app
 }
