@@ -68,6 +68,7 @@ database_setup(){
 }
 
 setup_ssh_certbot(){
+    echo ================================================= certbot setup ============================================================
     sudo add-apt-repository ppa:certbot/certbot
     sudo apt-get update
     sudo apt-get install python-certbot-nginx
@@ -75,6 +76,7 @@ setup_ssh_certbot(){
 }
 
 setup_supervisor(){
+    echo ================================================= supervisor setup ============================================================
     sudo apt-get install -y supervisor
     sudo bash -c 'cat <<EOF > /etc/supervisor/conf.d/yummy.conf
     [program:yummy]
