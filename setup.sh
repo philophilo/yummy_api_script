@@ -67,6 +67,13 @@ database_setup(){
     python manage.py db upgrade
 }
 
+setup_ssh_certbot(){
+    sudo add-apt-repository ppa:certbot/certbot
+    sudo apt-get update
+    sudo apt-get install python-certbot-nginx
+    sudo certbot --nginx
+}
+
 setup_supervisor(){
     sudo apt-get install -y supervisor
     sudo bash -c 'cat <<EOF > /etc/supervisor/conf.d/yummy.conf
@@ -99,6 +106,7 @@ run(){
     app_setup
     nginx_setup
     database_setup
+    setup_ssh_certbot
     setup_supervisor
     start_app
 }
