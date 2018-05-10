@@ -76,7 +76,7 @@ setup_ssh_certbot(){
     sudo cp /usr/lib/python3/dist-packages/apt_pkg.cpython-35m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages/apt_pkg.so
     sudo pip3 install cffi
     sudo apt-get install python-certbot-nginx
-    sudo certbot --nginx
+    sudo certbot --nginx certonly # create a single new certficate, or update existing and assign to specified name
 }
 
 setup_supervisor(){
