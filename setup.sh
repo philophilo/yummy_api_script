@@ -75,7 +75,7 @@ setup_ssh_certbot(){
     sudo apt-get update
     sudo pip3 install cffi
     sudo apt-get install -y python-certbot-nginx
-    sudo certbot --nginx certonly
+    sudo certbot --nginx
 }
 
 start_nginx(){
