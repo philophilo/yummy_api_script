@@ -75,7 +75,7 @@ setup_ssh_certbot(){
     sudo apt-get update
     sudo pip3 install cffi
     sudo apt-get install -y python-certbot-nginx
-    sudo certbot --nginx
+    sudo certbot --nginx certonly
 }
 
 start_nginx(){
@@ -94,6 +94,13 @@ start_app(){
     sudo supervisorctl reread
     sudo supervisorctl update
     sudo supervisorctl start yummy
+    # fix ubuntu 16.04 bug, race between systemd and nginx. 
+    # As if systemd expects the PID file to be populated before nginx has the time to create it.
+    sudo mkdir /etc/systemd/system/nginx.service.d
+    printf "[Service]\nExecStartPost=/bin/sleep 0.1\n" > override.conf
+    sudo mv override.conf /etc/systemd/system/nginx.service.d/override.conf
+    sudo systemctl daemon-reload
+    sudo systemctl restart nginx 
 }
 
 run(){
