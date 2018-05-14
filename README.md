@@ -1,6 +1,6 @@
-# yummy_api_script
+# Yummy api script
 
-The script deploys the [yummy recipes api](https://github.com/philophilo/yummy_api)
+## The script deploys the [yummy recipes api.](https://github.com/philophilo/yummy_api)
 
 clone the repo
 
