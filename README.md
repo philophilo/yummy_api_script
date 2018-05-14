@@ -14,4 +14,4 @@ Run the script
 
 `. setup.sh` or `source setup.sh`
 
-More detailed explanation on [here](https://medium.com/@phil.kwesiga/automate-deploying-python-flask-api-and-react-redux-frontend-to-aws-ec2-instances-ea17ea4a64a5)
+More detailed explanation [here](https://medium.com/@phil.kwesiga/automate-deploying-python-flask-api-and-react-redux-frontend-to-aws-ec2-instances-ea17ea4a64a5)
