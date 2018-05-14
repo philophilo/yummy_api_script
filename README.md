@@ -9,4 +9,4 @@ change directory
 
 `cd yummy_api_script`
 
-More detailed explation on [here](https://medium.com/@phil.kwesiga/automate-deploying-python-flask-api-and-react-redux-frontend-to-aws-ec2-instances-ea17ea4a64a5)
+More detailed explanation on [here](https://medium.com/@phil.kwesiga/automate-deploying-python-flask-api-and-react-redux-frontend-to-aws-ec2-instances-ea17ea4a64a5)
