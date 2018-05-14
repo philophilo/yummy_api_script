@@ -2,11 +2,11 @@
 
 #### The script deploys the [yummy recipes api.](https://github.com/philophilo/yummy_api)
 
-clone the repo
+Clone the repo
 
 `git clone https://github.com/philophilo/yummy_api_script.git`
 
-change directory
+Change directory
 
 `cd yummy_api_script`
 
